@@ -5,7 +5,7 @@ class Count:
     def __init__(
         self, 
         directory,
-        extensions:list = [".py", ".txt", ".json"], 
+        extensions:list = [".py"], 
         exclude_files:list = ["__pycache__"],
         skip_on_error = True,
         ignore_this_file = True,
@@ -26,7 +26,10 @@ class Count:
         self.total_of_files = 0
         self.total_of_lines = 0
         self.total_of_blank_lines = 0
-        
+        self.class_count = 0
+        self.comment_count = 0
+        self.func = 0
+
     def get_files(self, path = None):
         if path == None:
             path = self.directory
@@ -45,13 +48,17 @@ class Count:
     
     def display(self):
         print("=====================================")
-        print(f"File Count Errors: {len(self.error_files)}")
+        print(f"| File Count Errors: {len(self.error_files)}")
         for file in self.error_files:
             print(f"[ERROR] > {file}")
 
         print("=====================================")
-        print(f"Total lines > {self.total_of_lines + self.total_of_blank_lines} ({self.total_of_lines})")
-        print(f"Empty lines > {self.total_of_blank_lines}")
+        print(f"|       Files > {len(self.files)}")
+        print(f"|       Class > {self.class_count}")
+        print(f"|    Function > {self.func}")
+        print(f"|    Comments > {self.comment_count}")
+        print(f"| Empty lines > {self.total_of_blank_lines}")
+        print(f"| Total lines > {self.total_of_lines + self.total_of_blank_lines} ({self.total_of_lines})")
         
     def scan(self):
         print(f"(0.0%) {self.directory} > Scanning")
@@ -79,6 +86,12 @@ class Count:
                             local_count += 1
                         else:
                             local_blank_count +=1
+                        if "class" in line:
+                            self.class_count += 1
+                        elif "#" in line:
+                            self.comment_count += 1 
+                        elif "def" in line:
+                            self.func += 1 
                     print(f"{'({:.1f}%)'.format(100*i/self.total_of_files)} {file_directory} > {local_count} ({local_blank_count})")
                     self.total_of_lines += local_count
                     self.total_of_blank_lines += local_blank_count
@@ -90,5 +103,5 @@ class Count:
 
 files = Count(
     directory = os.getcwd(), 
-    exclude_files = ["__pycache__", "Random", "Database"]
+    exclude_files = ["__pycache__"]
 ).scan()
