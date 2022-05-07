@@ -55,7 +55,7 @@ class Count:
         print("=====================================")
         print(f"|       Files > {len(self.files)}")
         print(f"|       Class > {self.class_count}")
-        print(f"|    Function > {self.func}")
+        print(f"|   Functions > {self.func}")
         print(f"|    Comments > {self.comment_count}")
         print(f"| Empty lines > {self.total_of_blank_lines}")
         print(f"| Total lines > {self.total_of_lines + self.total_of_blank_lines} ({self.total_of_lines})")
